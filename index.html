@@ -17,6 +17,9 @@
             --alert-bg: #fdf2f2;
             --alert-border: #de6b6b;
             --alert-text: #9b2c2c;
+            --info-blue-bg: #edf7fc;
+            --info-blue-border: #3182ce;
+            --info-blue-text: #1a4971;
             --text-main: #2d2b2a;
             --text-muted: #6e6963;
             --border-light: #e5dec9;
@@ -73,7 +76,7 @@
             top: 10px;
             z-index: 100;
             background: var(--bg-main);
-            scrollbar-width: none; /* 隱藏捲軸 */
+            scrollbar-width: none;
         }
 
         .tab-nav::-webkit-scrollbar {
@@ -184,7 +187,33 @@
         }
 
         .alert-box li {
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+        }
+
+        /* 電子票操作專屬提示盒 */
+        .epass-box {
+            background-color: var(--info-blue-bg);
+            border: 1px solid var(--info-blue-border);
+            border-left: 5px solid var(--info-blue-border);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            color: var(--info-blue-text);
+        }
+
+        .epass-box h4 {
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+            color: #103252;
+        }
+
+        .epass-box ul {
+            padding-left: 20px;
+            font-size: 0.95rem;
+        }
+
+        .epass-box li {
+            margin-bottom: 6px;
         }
 
         /* 每日行程抬頭 */
@@ -265,6 +294,32 @@
             color: #d97724;
         }
 
+        /* 票券標籤徽章 */
+        .ticket-tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .tag-pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .tag-buy {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .tag-ic {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
         /* 地點超連結 */
         a.map-link {
             color: #1a6d9c;
@@ -295,17 +350,17 @@
             margin-bottom: 4px;
         }
 
-        /* 日文對照表格 */
+        /* 表格樣式 */
         .jp-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
         }
 
         .jp-table th, .jp-table td {
             border: 1px solid var(--border-light);
-            padding: 8px 12px;
+            padding: 8px 10px;
             text-align: left;
         }
 
@@ -334,6 +389,13 @@
             border-bottom: 1px dashed var(--border-light);
             padding-bottom: 5px;
         }
+        .souvenir-card ul {
+            padding-left: 18px;
+            font-size: 0.93rem;
+        }
+        .souvenir-card li {
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body>
@@ -347,7 +409,7 @@
 
     <!-- 行程天數頁籤選單 (手機可橫向滑動點擊) -->
     <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab(this, 'overview')">📌 總覽與注意事項</button>
+        <button class="tab-btn active" onclick="switchTab(this, 'overview')">📌 總覽與電子票指南</button>
         <button class="tab-btn" onclick="switchTab(this, 'day1')">Day 1 正案（丸龜・高知）</button>
         <button class="tab-btn" onclick="switchTab(this, 'day1-backup')">Day 1 備案</button>
         <button class="tab-btn" onclick="switchTab(this, 'day2')">Day 2（高知・松山・道後）</button>
@@ -357,7 +419,7 @@
         <button class="tab-btn" onclick="switchTab(this, 'jp-tools')">🗣️ 實用日文</button>
     </div>
 
-    <!-- 頁籤內容：總覽與注意事項 -->
+    <!-- 頁籤內容：總覽與電子票指南 -->
     <div id="overview" class="tab-content active">
         <div class="card">
             <h2 class="card-title">📌 航班資訊與住宿總覽</h2>
@@ -376,25 +438,91 @@
                     <h4>🏨 飯店住宿資訊</h4>
                     <p><strong>D1 住宿：</strong><a href="https://maps.google.com/?q=Dormy+Inn+Kochi" target="_blank" class="map-link">多美迎高知飯店 (Dormy Inn)</a></p>
                     <p><strong>D2 住宿：</strong><a href="https://maps.google.com/?q=Toyoko+Inn+Matsuyama+Ichibancho" target="_blank" class="map-link">東橫INN 松山一番町</a></p>
-                    <p><strong>D3：</strong>松山出發 ➔ 道後/早安行程 ➔ 岡山城巡禮後前往岡山機場搭機返台</p>
+                    <p><strong>D3：</strong>松山出發 ➔ 道後日出 ➔ 岡山城巡禮後前往岡山機場搭機返台</p>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2 class="card-title">⚠️ 交通購票、劃位與銜接注意事項</h2>
-            <div class="alert-box">
-                <h4>🚨 劃位與銜接 key points（請出發前核對時刻）：</h4>
+            <h2 class="card-title">📱 JR 四國 3 日券（已購電子票）實戰操作指南</h2>
+            <div class="epass-box">
+                <h4>🎫 電子票（QR Code 版）啟用與進出站規則：</h4>
                 <ul>
-                    <li><strong>車票圖例說明：</strong>JR四國周遊券（兒島以南可搭）；刷 ICOCA（伊予鐵道可刷，JR 不能刷 IC）；另購（需另外買票）。</li>
-                    <li><strong>D1 岡山站補票：</strong>抵達岡山後，下至 2F 綠色售票機補買「岡山 ➔ 兒島」特急券（¥1,270）。</li>
-                    <li><strong>D1 特急南風號（岡山/丸龜➔高知）：</strong>劃位務必選<strong>左側（D/E 席）</strong>，可觀賞大步危與吉野川溪谷景色。</li>
-                    <li><strong>D2 高速巴士 Whale Express：</strong>11:50 播磨屋橋出發，請預先確認是否需提前預約劃位。</li>
-                    <li><strong>D3 松山站購票：</strong>06:40 前需在松山站購票並買早餐（有周遊券可直接用 QR code 進站）。</li>
-                    <li><strong>D3 特急 Shiokaze 8 號：</strong>自由席選<strong>左側（D/E 席）</strong>景色較佳。</li>
-                    <li><strong>D3 岡山城正案底線：</strong>11:30 前必須離開岡山城；若 10:30 仍未抵達岡山，則放棄岡山城行程。</li>
+                    <li><strong>何時啟用（Activate）：</strong>請於 <strong>12/10（Day 1）準備進入兒島以南（或丸龜站出站）時</strong>再點擊啟用，一旦啟用即開始計算連續 3 天（12/10 – 12/12），<strong>切勿提前一天按啟用</strong>。</li>
+                    <li><strong>動態 QR Code 規定：</strong>過閘門與查票時需保持網路連線、調高螢幕亮度開啟即時網頁（<strong>不接受截圖</strong>）。隨身請務必攜帶行動電源。</li>
+                    <li><strong>進出站方式：</strong>主要車站（丸龜、高知、JR松山）有 QR Code 掃描閘門可直接感應；若遇無掃描機的閘門或<strong>跨區路段（岡山 ⇄ 兒島）</strong>，請走<strong>人工通道</strong>同時出示「手機電子票」與「紙本補票券」。</li>
+                    <li><strong>座位與劃位規定：</strong>電子票含「普通車自由席」（建議提早 15 分鐘排隊選<strong>左側 D/E 席</strong>看海景與溪谷）；若想搭指定席，可持電子票與護照至 JR 四國主要車站綠色窗口加購外國人專用指定席回數券（4張 ¥1,200）。</li>
                 </ul>
             </div>
+
+            <div class="alert-box">
+                <h4>🚨 跨區補票與路面電車「刷卡差異」重點提醒：</h4>
+                <ul>
+                    <li><strong>【D1 補票】岡山 ➔ 兒島（¥1,270）：</strong>抵達岡山站後，先至 2F 綠色售票機買好「岡山 ➔ 兒島」紙本乘車券＋自由席特急券，直接放入自動驗票閘門進站。</li>
+                    <li><strong>【D3 補票】兒島 ➔ 岡山（¥1,270）：</strong>早上 06:40 到 JR 松山站時，先在綠色窗口／售票機買好「兒島 ➔ 岡山」紙本車票，進松山站掃手機 QR Code，到岡山站走人工通道出示兩者直接出站（免排隊精算補票，省時間衝岡山城！）。</li>
+                    <li><strong>【D2 高知路面電車】土佐電交通：</strong>✅ <strong>可用電子周遊券</strong>（下車向司機出示手機動態畫面即可）。</li>
+                    <li><strong>【D2-D3 松山路面電車】伊予鐵道：</strong>❌ <strong>不可用周遊券！</strong>（2026/3/7 起已退出周遊券範圍），往返道後溫泉與 JR 松山站請直接<strong>刷 ICOCA</strong>。</li>
+                    <li><strong>【D3 岡山城正案底線】</strong>11:30 前必須離開岡山城；若 10:30 仍未抵達岡山，則放棄岡山城行程。</li>
+                </ul>
+            </div>
+
+            <h3 style="font-size: 1.05rem; color: var(--primary-dark); margin: 16px 0 8px;">📊 全程各段交通票券對照速查表</h3>
+            <table class="jp-table">
+                <thead>
+                    <tr>
+                        <th>天數</th>
+                        <th>移動區間</th>
+                        <th>票券使用方式</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>D1</td>
+                        <td>關西機場 ➔ 新大阪 ➔ 岡山</td>
+                        <td><span class="ticket-tag tag-buy">另購車票</span> JR 西日本 Haruka ＋ 新幹線</td>
+                    </tr>
+                    <tr>
+                        <td>D1</td>
+                        <td>岡山 ➔ 兒島（特急南風號）</td>
+                        <td><span class="ticket-tag tag-buy">補票 ¥1,270</span> 岡山站事先買紙本自由席券進站</td>
+                    </tr>
+                    <tr>
+                        <td>D1</td>
+                        <td>兒島 ➔ 丸龜 ➔ 高知</td>
+                        <td><span class="ticket-tag tag-pass">JR 四國電子票</span> 兒島以南直接適用（免下車）</td>
+                    </tr>
+                    <tr>
+                        <td>D2</td>
+                        <td>高知市區路面電車（土佐電）</td>
+                        <td><span class="ticket-tag tag-pass">JR 四國電子票</span> 下車出示手機動態 QR 畫面</td>
+                    </tr>
+                    <tr>
+                        <td>D2</td>
+                        <td>高知 ➔ 松山（高速巴士）</td>
+                        <td><span class="ticket-tag tag-buy">另購車票</span> Whale Express（建議提前預約）</td>
+                    </tr>
+                    <tr>
+                        <td>D2-D3</td>
+                        <td>松山市區路面電車（伊予鐵道）</td>
+                        <td><span class="ticket-tag tag-ic">刷 ICOCA</span> 2026/3/7起不適用周遊券</td>
+                    </tr>
+                    <tr>
+                        <td>D3</td>
+                        <td>JR 松山 ➔（丸龜）➔ 兒島</td>
+                        <td><span class="ticket-tag tag-pass">JR 四國電子票</span> 松山站掃 QR Code 進站</td>
+                    </tr>
+                    <tr>
+                        <td>D3</td>
+                        <td>兒島 ➔ 岡山（特急潮風號）</td>
+                        <td><span class="ticket-tag tag-buy">補票 ¥1,270</span> 建議早上在松山站先買好紙本券</td>
+                    </tr>
+                    <tr>
+                        <td>D3</td>
+                        <td>岡山站 ➔ 岡山機場（巴士）</td>
+                        <td><span class="ticket-tag tag-buy">另購車票</span> 岡山站西口售票機購票或刷 IC 卡</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -415,21 +543,32 @@
             </div>
             <div class="timeline-item">
                 <div class="time-badge">07:27 左右</div>
-                <div class="timeline-content"><strong>特急 Haruka</strong>：關西機場 ➔ 新大阪站</div>
+                <div class="timeline-content">
+                    <strong>特急 Haruka</strong>：關西機場 ➔ <a href="https://maps.google.com/?q=Shin-Osaka+Station" target="_blank" class="map-link">新大阪站</a> <span class="ticket-tag tag-buy">另購車票</span>
+                </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">09:41 – 10:25</div>
-                <div class="timeline-content"><strong>新幹線 Nozomi 9 號</strong>：新大阪 ➔ 岡山站</div>
+                <div class="timeline-content">
+                    <strong>新幹線 Nozomi 9 號</strong>：新大阪 ➔ <a href="https://maps.google.com/?q=Okayama+Station" target="_blank" class="map-link">岡山站</a> <span class="ticket-tag tag-buy">另購車票</span>
+                </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">10:25 – 11:00</div>
                 <div class="timeline-content">
-                    <div class="highlight-important"><strong>⚠️ 補票提醒：</strong>至岡山站 2F 綠色售票機補買「岡山 ➔ 兒島」特急券（¥1,270）。</div>
+                    <div class="highlight-important">
+                        <strong>⚠️ 跨區補票與電子票啟用步驟：</strong><br>
+                        1. 至岡山站 2F 綠色售票機買好<strong>「岡山 ➔ 兒島」紙本車票（¥1,270）</strong>，將紙本票放入自動閘門進站。<br>
+                        2. 準備進入兒島站時，於手機點擊<strong>啟用（Activate）JR 四國 3 日電子票</strong>。
+                    </div>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">11:05 – 11:46</div>
-                <div class="timeline-content"><strong>特急南風 7 號</strong>：岡山 ➔ 丸龜站</div>
+                <div class="timeline-content">
+                    <strong>特急南風 7 號</strong>：岡山 ➔ <a href="https://maps.google.com/?q=Marugame+Station" target="_blank" class="map-link">丸龜站</a> <span class="ticket-tag tag-pass">兒島以南用電子票</span>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">出丸龜站走人工通道，同時出示「岡山➔兒島紙本票」與「手機電子票」。</p>
+                </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">11:50 – 13:40</div>
@@ -437,17 +576,22 @@
                     <strong>丸龜快閃（車站寄物）</strong>
                     <ul class="item-details">
                         <li>11:50–12:30 享用讚岐烏龍麵午餐。</li>
-                        <li>12:35–13:25 散步至 丸龜城 登頂參觀。</li>
+                        <li>12:35–13:25 散步至 <a href="https://maps.google.com/?q=Marugame+Castle" target="_blank" class="map-link">丸龜城</a> 登頂參觀。</li>
                     </ul>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">13:54 左右起</div>
-                <div class="timeline-content"><strong>特急南風號</strong>：丸龜 ➔ 高知站（劃位選左側 D/E 席看吉野川）</div>
+                <div class="timeline-content">
+                    <strong>特急南風號</strong>：丸龜 ➔ <a href="https://maps.google.com/?q=Kochi+Station" target="_blank" class="map-link">高知站</a> <span class="ticket-tag tag-pass">電子票掃碼進出</span>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">自由席提早排隊選<strong>左側（D/E 席）</strong>觀賞大步危與吉野川溪谷。</p>
+                </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">18:00 – 20:30</div>
-                <div class="timeline-content">弘人市場晚餐、逛 Mont-bell 高知店、回飯店泡湯。</div>
+                <div class="timeline-content">
+                    入住 <a href="https://maps.google.com/?q=Dormy+Inn+Kochi" target="_blank" class="map-link">多美迎高知飯店</a>，逛 <a href="https://maps.google.com/?q=Hirome+Market" target="_blank" class="map-link">弘人市場</a> 晚餐、逛 Mont-bell 高知店、回飯店泡湯。
+                </div>
             </div>
         </div>
     </div>
@@ -460,16 +604,20 @@
         </div>
         <div class="timeline">
             <div class="timeline-item">
-                <div class="time-badge">10:00 – 14:00</div>
-                <div class="timeline-content">關西機場通關 ➔ 搭 Haruka 至新大阪 ➔ 轉新幹線至岡山站。</div>
+                <div class="time-badge">10:00 – 13:35</div>
+                <div class="timeline-content">關西機場通關 ➔ 搭 Haruka 至新大阪 ➔ 轉新幹線至岡山站 <span class="ticket-tag tag-buy">另購車票</span>。</div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">13:35 – 13:50</div>
-                <div class="timeline-content">岡山站補買「岡山 ➔ 兒島」特急券（¥1,270）。</div>
+                <div class="timeline-content">
+                    岡山站 2F 綠色售票機補買<strong>「岡山 ➔ 兒島」紙本車票（¥1,270）</strong>進站，並啟用 JR 四國電子票。
+                </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">14:00 後</div>
-                <div class="timeline-content">搭特急南風號直奔高知站，約 17:00 抵達 Check-in 後逛弘人市場。</div>
+                <div class="timeline-content">
+                    搭特急南風號直奔高知站 <span class="ticket-tag tag-pass">兒島以南用電子票</span>，約 17:00 抵達 Check-in 後逛弘人市場（出站走人工通道出示紙本票＋電子票）。
+                </div>
             </div>
         </div>
     </div>
@@ -483,19 +631,31 @@
         <div class="timeline">
             <div class="timeline-item">
                 <div class="time-badge">07:45 – 10:30</div>
-                <div class="timeline-content">咖啡屋らんぷ朝食 ➔ 參訪 高知城 🏯。</div>
+                <div class="timeline-content">
+                    <a href="https://maps.google.com/?q=Lamp+Kochi" target="_blank" class="map-link">咖啡屋らんぷ</a> 朝食 ➔ 參訪 <a href="https://maps.google.com/?q=Kochi+Castle" target="_blank" class="map-link">高知城 🏯</a>。
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">※ 若搭乘高知市區路面電車（土佐電交通），下車出示 <strong>JR 四國電子票</strong> 即可免費搭乘。</p>
+                </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">11:50 左右起</div>
-                <div class="timeline-content">搭乘<strong>高速巴士 Whale Express</strong>：播磨屋橋 ➔ 大街道（約 2.5 小時）。</div>
+                <div class="timeline-content">
+                    搭乘<strong>高速巴士 Whale Express</strong>：<a href="https://maps.google.com/?q=Harimayabashi" target="_blank" class="map-link">播磨屋橋</a> ➔ <a href="https://maps.google.com/?q=Okaido+Station" target="_blank" class="map-link">大街道</a>（約 2.5 小時） <span class="ticket-tag tag-buy">另購車票</span>
+                </div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">14:40 – 16:00</div>
-                <div class="timeline-content">松山城 🏯 參觀（注意 16:00 最後入場）。</div>
+                <div class="timeline-content">
+                    <a href="https://maps.google.com/?q=Toyoko+Inn+Matsuyama+Ichibancho" target="_blank" class="map-link">東橫INN</a> 寄放行李 ➔ <a href="https://maps.google.com/?q=Matsuyama+Castle" target="_blank" class="map-link">松山城 🏯</a> 參觀（注意 16:00 最後入場）。
+                </div>
             </div>
             <div class="timeline-item">
-                <div class="time-badge">16:40 – 19:30</div>
-                <div class="timeline-content">伊佐爾波神社看夕陽 ➔ 道後商店街、道後溫泉本館泡湯與晚餐。</div>
+                <div class="time-badge">16:05 – 20:00</div>
+                <div class="timeline-content">
+                    搭路面電車前往道後溫泉 <span class="ticket-tag tag-ic">刷 ICOCA</span> ➔ <a href="https://maps.google.com/?q=Isaniwa+Shrine" target="_blank" class="map-link">伊佐爾波神社</a> 看夕陽 ➔ 道後商店街、<a href="https://maps.google.com/?q=Dogo+Onsen+Honkan" target="_blank" class="map-link">道後溫泉本館</a> 泡湯與晚餐 ➔ 搭電車回大街道。
+                    <div class="highlight-important">
+                        <strong>💡 刷卡提醒：</strong>松山市區伊予鐵道路面電車<strong>不適用 JR 四國周遊券</strong>，上下車請直接刷 ICOCA。
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -511,22 +671,26 @@
             <div class="timeline-item">
                 <div class="time-badge">清晨 06:00 – 06:30</div>
                 <div class="timeline-content">
-                    <strong>道後溫泉/松山市區晨景與日出巡禮</strong>
-                    <p>清晨漫步道後溫泉街或道後公園欣賞晨曦日出，感受寧靜的晨間溫泉鄉氛圍。</p>
+                    <strong>道後溫泉／松山市區晨景與日出巡禮</strong>
+                    <p>清晨漫步道後溫泉街或道後公園欣賞晨曦日出，感受寧靜的晨間溫泉鄉氛圍（搭路面電車請 <span class="ticket-tag tag-ic">刷 ICOCA</span>）。</p>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="time-badge">06:40 – 07:15</div>
                 <div class="timeline-content">
-                    退房，搭路面電車至 <a href="https://maps.google.com/?q=JR+Matsuyama+Station" target="_blank" class="map-link">JR 松山站</a> 買票、買早餐。
+                    退房，搭路面電車至 <a href="https://maps.google.com/?q=JR+Matsuyama+Station" target="_blank" class="map-link">JR 松山站</a> <span class="ticket-tag tag-ic">刷 ICOCA</span>
+                    <div class="highlight-important">
+                        <strong>🎫 省時補票技巧：</strong>在松山站進站前，先到綠色窗口／售票機買好<strong>「兒島 ➔ 岡山」紙本自由席車票（¥1,270）</strong>並買早餐；進松山站時直接用手機掃 <strong>JR 四國電子票 QR Code</strong> 進站！
+                    </div>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="time-badge">07:20 – 10:00</div>
                 <div class="timeline-content">
-                    <strong>特急しおかぜ 8 號</strong>：JR 松山站 ➔ 岡山站（適用周遊券，自由席建議選左側 D/E 席）
+                    <strong>特急しおかぜ 8 號（潮風號）</strong>：JR 松山站 ➔ <a href="https://maps.google.com/?q=Okayama+Station" target="_blank" class="map-link">岡山站</a> <span class="ticket-tag tag-pass">松山➔兒島用電子票</span> <span class="ticket-tag tag-buy">兒島➔岡山用補票券</span>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">自由席建議選<strong>左側（D/E 席）</strong>；抵達岡山站出站時走<strong>人工通道</strong>，同時出示「手機電子票」與「兒島➔岡山紙本票」即可快速出站。</p>
                 </div>
             </div>
 
@@ -552,12 +716,12 @@
 
             <div class="timeline-item">
                 <div class="time-badge">12:55 – 13:25</div>
-                <div class="timeline-content">於岡山站搭乘機場巴士前往 <a href="https://maps.google.com/?q=Okayama+Airport" target="_blank" class="map-link">岡山機場</a>。</div>
+                <div class="timeline-content">於岡山站西口搭乘機場巴士前往 <a href="https://maps.google.com/?q=Okayama+Airport" target="_blank" class="map-link">岡山機場</a> <span class="ticket-tag tag-buy">另購巴士票</span></div>
             </div>
 
             <div class="timeline-item">
                 <div class="time-badge">13:30 – 15:25</div>
-                <div class="timeline-content">抵達岡山機場，辦理虎航報到，搭乘 <strong>15:25</strong> 航班返台 ✈️。</div>
+                <div class="timeline-content">抵達岡山機場，辦理虎航報到與最後免稅店補貨，搭乘 <strong>15:25</strong> 航班返台 ✈️。</div>
             </div>
         </div>
     </div>
@@ -570,12 +734,16 @@
         </div>
         <div class="timeline">
             <div class="timeline-item">
+                <div class="time-badge">06:40 – 07:15</div>
+                <div class="timeline-content">抵達 JR 松山站，先買好<strong>「兒島 ➔ 岡山」紙本自由席車票（¥1,270）</strong>，再用手機掃 JR 四國電子票 QR Code 進站。</div>
+            </div>
+            <div class="timeline-item">
                 <div class="time-badge">07:20 – 09:20</div>
-                <div class="timeline-content">特急しおかぜ 8 号：松山 ➔ 丸龜站，寄放行李後快閃丸龜城（約 50 分鐘）。</div>
+                <div class="timeline-content">特急しおかぜ 8 号：松山 ➔ <a href="https://maps.google.com/?q=Marugame+Station" target="_blank" class="map-link">丸龜站</a> <span class="ticket-tag tag-pass">電子票掃碼進出</span>，寄放行李後快閃丸龜城（約 50 分鐘）。</div>
             </div>
             <div class="timeline-item">
                 <div class="time-badge">11:03 左右</div>
-                <div class="timeline-content">搭特急前往岡山站（約 11:45 抵達），午餐並採買後搭 12:55 機場巴士前往岡山機場。</div>
+                <div class="timeline-content">搭特急前往岡山站（約 11:45 抵達，出站走人工通道出示電子票＋兒島➔岡山紙本票），午餐採買後搭 12:55 機場巴士前往岡山機場。</div>
             </div>
         </div>
     </div>
@@ -623,7 +791,7 @@
     <!-- 頁籤內容：實用日文與確認清單 -->
     <div id="jp-tools" class="tab-content">
         <div class="card">
-            <h2 class="card-title">🗣️ 旅途實用日文對話與出發前清單</h2>
+            <h2 class="card-title">🗣️ 旅途實用日文對話（含補票與電子票用語）</h2>
             
             <table class="jp-table">
                 <thead>
@@ -634,6 +802,18 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td>我要買「岡山到兒島」的乘車券與自由席特急券</td>
+                        <td>岡山から児島までの乗車券と自由席特急券をください</td>
+                    </tr>
+                    <tr>
+                        <td>我要買「兒島到岡山」的乘車券與自由席特急券</td>
+                        <td>児島から岡山までの乗車券と自由席特急券をください</td>
+                    </tr>
+                    <tr>
+                        <td>我使用 JR 四國電子周遊券（出示 QR Code 畫面）</td>
+                        <td>JR四国のデジタルパスを使っています</td>
+                    </tr>
+                    <tr>
                         <td>請問這班車到○○嗎？</td>
                         <td>この電車は○○に行きますか？</td>
                     </tr>
@@ -642,20 +822,12 @@
                         <td>○○駅はどこですか？</td>
                     </tr>
                     <tr>
-                        <td>我要買一張到○○的票</td>
-                        <td>○○までの切符を一枚ください</td>
-                    </tr>
-                    <tr>
                         <td>請問可以寄放行李嗎？</td>
-                        <td>荷金を預かってもらえますか？</td>
+                        <td>荷物を預かってもらえますか？</td>
                     </tr>
                     <tr>
                         <td>我有訂位，名字是○○</td>
                         <td>○○で予約しています</td>
-                    </tr>
-                    <tr>
-                        <td>請給我菜單 / 我要這個</td>
-                        <td>メニューをお願いします / これをください</td>
                     </tr>
                     <tr>
                         <td>請幫我結帳 / 可以刷卡嗎？</td>
@@ -671,22 +843,16 @@
 <script>
     // 手機頁面點擊切換頁籤的核心 JavaScript 函式
     function switchTab(buttonElement, contentId) {
-        // 移除所有頁籤按鈕的 active 樣式
         const buttons = document.querySelectorAll('.tab-btn');
         buttons.forEach(btn => btn.classList.remove('active'));
 
-        // 隱藏所有頁籤內容區塊
         const contents = document.querySelectorAll('.tab-content');
         contents.forEach(content => content.classList.remove('active'));
 
-        // 為當前點擊的按鈕與對應內容加上 active 樣式
         buttonElement.classList.add('active');
         document.getElementById(contentId).classList.add('active');
 
-        // 自動將被點擊的頁籤滾動至可視區域內（特別針對手機橫向捲動優化）
         buttonElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        
-        // 切換後自動回到頁面頂端或行程卡片開頭，提升手機瀏覽體驗
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
